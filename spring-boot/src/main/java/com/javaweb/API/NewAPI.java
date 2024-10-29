@@ -29,17 +29,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.javaweb.Beans.BuildingDTO;
 //import com.javaweb.Beans.BuildingDTO;
 import com.javaweb.Beans.ErrorReponseDTO;
-import com.javaweb.Beans.MarketDTO;
 import com.javaweb.Beans.response.BuildingResponseDTO;
 import com.javaweb.Beans.response.RentareaResponseDTO;
 import com.javaweb.customexception.FileRequireException;
 import com.javaweb.repository.BuildingRepository;
-import com.javaweb.repository.BuildingrenttypeRepository;
 import com.javaweb.repository.RentareaRepository;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.repository.entity.RentareaEntity;
 import com.javaweb.service.BuildingService;
-import com.javaweb.service.RentareaService;
 
 import ch.qos.logback.core.joran.action.NewRuleAction;
 
@@ -51,9 +48,13 @@ public class NewAPI {
 	public BuildingService buildingservice;
 	
 	
-	@GetMapping(value = "/api/building/")
-	public Object postBuilding2(@RequestParam Map<String,Object> request) {
-		List<BuildingResponseDTO> result=buildingservice.findAll(request);
+	@GetMapping(value="/api")
+	public void in(@RequestParam Integer id) {
+		System.out.print("success");
+	}
+	@GetMapping(value = "/api/buildings")
+	public Object postBuilding2(@RequestParam Map<String,Object> request,@RequestParam List<String> typecode) {
+		List<BuildingResponseDTO> result=buildingservice.findAll(request,typecode);
 		return result;
 	}
 

@@ -9,5 +9,5 @@ import com.javaweb.Beans.response.BuildingResponseDTO;
 public interface BuildingService {
 	//public List<BuildingResponseDTO> findAll(Integer Id,Integer districtId);
 
-	public List<BuildingResponseDTO> findAll(Map<String, Object> request);
+	public List<BuildingResponseDTO> findAll(Map<String, Object> request,List<String> typecode);
 }

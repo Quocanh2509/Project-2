@@ -3,20 +3,14 @@ package com.javaweb.repository.entity;
 public class RentareaEntity {
 
 	
-	private Integer buildingid;
-	private Integer value;
-	public Integer getBuildingid() {
-		return buildingid;
-	}
-	public void setBuildingid(Integer buildingid) {
-		this.buildingid = buildingid;
-	}
-	public Integer getValue() {
+	private String value;
+
+	public String getValue() {
 		return value;
 	}
-	public void setValue(Integer value) {
+
+	public void setValue(String value) {
 		this.value = value;
 	}
-	
 	
 }

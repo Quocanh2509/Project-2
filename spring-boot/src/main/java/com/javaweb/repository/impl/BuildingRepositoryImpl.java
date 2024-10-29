@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.javaweb.Beans.MarketDTO;
+
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.entity.BuildingEntity;
 
@@ -24,59 +24,130 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	static final String PASS = "amfrbghaf123@";
 	
 	
+	
+	public static boolean checkvalue(String s) {
+		try {
+			Integer num=Integer.parseInt(s);
+		}
+		catch (NumberFormatException e) {
+			return false;// TODO: handle exception
+		}
+		return true;
+	}
+	
+	
+	public static boolean checkKey(Map<String,Object> request,String key) {
+		if(request.containsKey(key)&&request.get(key)!=null && request.get(key)!=null) {
+			return true;
+		}
+		else return false;
+	}
+	
+	public static Integer choose(Map<String,Object> request,String start,String end) {
+		if(checkKey(request,start)&&checkKey(request,end)) {
+			return 0;// ton tai 2 key
+		}
+		else if(checkKey(request,start)) {
+			return 1;// ton tai 1 key ben trai
+		}
+		else if(checkKey(request,end)) {
+			return 2;// ton tai 1 key ben phai
+		}
+		return 3;
+	}
+	
+	public void joinTable(Map<String,Object> request,StringBuilder sql) {
+		if(checkKey(request,"typecode")==true) {
+			sql.append(" inner join buildingrenttype BR ON BD.id=BR.buildingid ");
+			sql.append(" inner join renttype RT ON RT.id=BR.renttypeid ");
+		}
+		if(checkKey(request,"startarea")||checkKey(request,"endarea")) {
+			sql.append(" inner join rentarea RA on BD.id=RA.buildingid ");
+		}
+		
+	}
+	
+	public void whereTable(Map<String,Object> request,StringBuilder where) {
+		for(Map.Entry<String, Object> item:request.entrySet()) {
+			if(checkKey(request,"staffid")) {
+				where.append(" AND EXISTS (SELECT 1 FROM assignmentbuilding AB WHERE AB.buildingid = BD.id ");
+				where.append(" AND AB.staffid = " + request.get("staffid") + ")");
+			}
+			if(!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("startarea")&&
+					!item.getKey().equals("endarea")) {
+				String value=item.getValue().toString();
+				if(checkvalue(value)) {
+					where.append(" AND BD."+item.getKey()+" = "+value);
+				}
+				else {
+					where.append(" AND BD."+item.getKey()+" LIKE '%"+value+"%'");
+				}
+			}
+		}
+	}
+	
+	
+	
+	public void Typecode(Map<String,Object> request,List<String> typecode,StringBuilder sql) {
+		int count=0;
+		if(typecode==null) {
+			return;
+		}
+		if(!typecode.isEmpty()) {
+			for(int i=0;i<typecode.size();i++) {
+				if(count==0) {
+					sql.append(" AND RT.code='"+typecode.get(i)+"' ");
+					count++;
+				}
+				else {
+					sql.append(" OR RT.code='"+typecode.get(i)+"' ");
+				}
+			}
+		}
+	}
+	
+	
+	public void conditions(Map<String,Object> request,StringBuilder where) {
+		Integer num = choose(request,"startarea","endarea");
+		if(num==0) {
+			where.append(" AND (RA.value>="+request.get("startarea")+" and RA.value<="+request.get("endarea")+")");
+		}
+		else if(num==1) {
+			where.append(" AND RA.value>="+request.get("startarea"));
+		}
+		else if(num==2) {
+			where.append(" AND RA.value<="+request.get("endarea"));
+		}
+		Integer num2= choose(request,"startprice","endprice");
+		if(num2==0) {
+			where.append(" AND BD.rentprice>="+request.get("startprice")+" AND BD.rentprice<="+request.get("endprice"));
+		}
+		else if(num2==1) {
+			where.append( " AND BD.rentprice>="+request.get("startprice"));
+		}
+		else if(num2==2) {
+			where.append(" AND BD.rentprice<="+request.get("endprice"));
+		}
+	}
+	
 	@Override
-	public List<BuildingEntity> findAll(Map<String,Object> request) {
-		
-		String sql ="SELECT * FROM building BD where 1=1";
-		if (request.get("staffid") != null) {
-		    sql += " AND EXISTS (SELECT 1 FROM assignmentbuilding AB WHERE AB.buildingid = BD.id";
-		    sql += " AND AB.staffid = " + request.get("staffid") + ")";
-		}
-		if (request.get("id") != null && !request.get("id").toString().isEmpty()) {
-		    sql += " AND BD.id = " + request.get("id") ;//1
-		}
-		
-		if (request.get("ward") != null && request.get("ward").equals("")==false) {
-			
-		    sql += " AND BD.ward = '"+request.get("ward")+"'";//2
-		}
-
-		if (request.get("name")!=null&&request.get("name").equals("")==false) {
-		    sql += " AND BD.name LIKE '%" + request.get("name") + "%'";//3
-		}
-		if(request.get("districtid")!=null&&!request.get("districtid").toString().isEmpty()) {
-			sql+= " AND BD.districtid = "+request.get("districtid");//4
-		}
-		if(request.get("street")!=null&&request.get("street").equals("")==false) {
-			sql += " AND BD.street = '"+request.get("street")+"'";//5
-		}
-		if(request.get("floorarea")!=null&&!request.get("floorarea").toString().isEmpty()) {
-			sql += " AND BD.floorarea = "+request.get("floorarea");//6
-		}
-		if(request.get("numberofbasement")!=null&&!request.get("numberofbasement").toString().isEmpty()) {
-			sql += " AND BD.numberofbasement = "+request.get("numberofbasement");
-		}
-		if(request.get("managername")!=null&&request.get("managername").equals("")==false) {
-			sql += " AND BD.managername = '"+request.get("managername")+"'";
-		}
-		if(request.get("managerphonenumber")!=null&&request.get("managerphonenumber").equals("")==false) {
-			sql += " AND BD.managerphonenumber = '"+request.get("managerphonenumber")+"'";
-		}
-		if(request.containsKey("startprice")&&request.containsKey("endprice")&&!request.get("endprice").equals("")&&!request.get("startprice").equals("")) {
-			sql += " AND BD.rentprice>="+request.get("startprice")+" AND BD.rentprice<="+request.get("endprice");
-		}
-		else if(request.containsKey("startprice")&&!request.get("startprice").equals("")) {
-			sql += " AND BD.rentprice>="+request.get("startprice");
-		}
-		else if(request.containsKey("endprice")&&!request.get("endprice").equals("")) {
-			sql += " AND BD.rentprice<="+request.get("endprice");
-		}
-		
-		//System.out.println(sql);
+	public List<BuildingEntity> findAll(Map<String,Object> request,List<String> typecode) {
+		StringBuilder sql=new StringBuilder("SELECT BD.id,BD.name,BD.districtid,BD.street,BD.ward,BD.numberofbasement,BD.floorarea,BD.rentprice,BD.managername,BD.managerphonenumber,"
+				+ "BD.servicefee,BD.brokeragefee"
+				+ " FROM building BD ");
+		joinTable(request,sql);
+		StringBuilder where=new StringBuilder("WHERE 1=1");
+		conditions(request,where);
+		whereTable(request,where);
+		Typecode(request,typecode,where);
+		sql.append(where);
+		sql.append(" GROUP BY BD.id ");
+		//System.out.println();
+		System.out.println(sql.toString());
 		List<BuildingEntity> arr=new ArrayList<>();
 		try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			Statement stm = conn.createStatement();
-			ResultSet rs = stm.executeQuery(sql)) {
+			ResultSet rs = stm.executeQuery(sql.toString())) {
 			while(rs.next()) {
 				BuildingEntity building=new BuildingEntity();
 				building.setId(rs.getInt("id"));
@@ -101,5 +172,6 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 
 		return arr;
 	}
+	
 	
 }

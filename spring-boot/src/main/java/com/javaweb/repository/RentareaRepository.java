@@ -7,5 +7,5 @@ import com.javaweb.repository.entity.RentareaEntity;
 import com.javaweb.repository.impl.RentareaRepositoryImpl;
 
 public interface RentareaRepository {
-	public List<RentareaEntity> findAlll(Map<String, Object> request);
+	public List<RentareaEntity> findAll(Integer id);
 }
