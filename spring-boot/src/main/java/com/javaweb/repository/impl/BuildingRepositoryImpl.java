@@ -66,13 +66,20 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		}
 	}
 	
+	public static boolean emptyValue(Map<String,Object> request,String key) {
+		if(request.containsKey(key)&&(request.get(key).equals("")||request.get(key).equals(null))) {
+			return false;
+		}
+		else return true;
+	}
+	
 	public void whereTable(Map<String,Object> request,StringBuilder where) {
 		for(Map.Entry<String, Object> item:request.entrySet()) {
-			if(checkKey(request,"staffid")) {
+			if(emptyValue(request, "staffid")==true&&checkKey(request,"staffid")) {
 				where.append(" AND EXISTS (SELECT 1 FROM assignmentbuilding AB WHERE AB.buildingid = BD.id ");
 				where.append(" AND AB.staffid = " + request.get("staffid") + ")");
 			}
-			if(!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("startarea")&&
+			if(emptyValue(request, item.getKey())==true&&!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("startarea")&&
 					!item.getKey().equals("endarea")&&!item.getKey().equals("startprice")&&!item.getKey().equals("endprice")) {
 				String value=item.getValue().toString();
 				if(checkvalue(value)) {
@@ -107,17 +114,18 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	}
 	
 	
-	public void conditions2(Map<String,Object> request,StringBuilder where) {
-		if(checkKey(request, "startarea")) {
+	
+	public void conditions(Map<String,Object> request,StringBuilder where) {
+		if(emptyValue(request, "startarea")&&checkKey(request, "startarea")) {
 			where.append(" AND RA.value>="+request.get("startarea"));
 		}
-		if(checkKey(request, "endarea")) {
+		if(emptyValue(request, "endarea")&&checkKey(request, "endarea")) {
 			where.append(" AND RA.value<="+request.get("endarea"));
 		}
-		if(checkKey(request,"startprice")) {
+		if(emptyValue(request, "startprice")&&checkKey(request,"startprice")) {
 			where.append( " AND BD.rentprice>="+request.get("startprice"));
 		}
-		if(checkKey(request, "endprice")) {
+		if(emptyValue(request, "endprice")&&checkKey(request, "endprice")) {
 			where.append(" AND BD.rentprice<="+request.get("endprice"));
 		}
 	}
@@ -129,7 +137,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 				+ " FROM building BD ");
 		joinTable(request,sql);
 		StringBuilder where=new StringBuilder("WHERE 1=1");
-		conditions2(request,where);
+		conditions(request,where);
 		whereTable(request,where);
 		Typecode(request,typecode,where);
 		sql.append(where);
