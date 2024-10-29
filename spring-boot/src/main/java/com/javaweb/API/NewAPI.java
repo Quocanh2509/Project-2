@@ -49,11 +49,13 @@ public class NewAPI {
 	
 	
 	@GetMapping(value="/api")
-	public void in(@RequestParam Integer id) {
+	public void in(@RequestParam Map<String,Object> id) {
 		System.out.print("success");
 	}
+	
+	
 	@GetMapping(value = "/api/buildings")
-	public Object postBuilding2(@RequestParam Map<String,Object> request,@RequestParam List<String> typecode) {
+	public Object postBuilding2(@RequestParam Map<String,Object> request,@RequestParam(required = false) List<String> typecode) {
 		List<BuildingResponseDTO> result=buildingservice.findAll(request,typecode);
 		return result;
 	}

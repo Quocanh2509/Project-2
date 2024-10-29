@@ -64,7 +64,6 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		if(checkKey(request,"startarea")||checkKey(request,"endarea")) {
 			sql.append(" inner join rentarea RA on BD.id=RA.buildingid ");
 		}
-		
 	}
 	
 	public void whereTable(Map<String,Object> request,StringBuilder where) {
@@ -74,7 +73,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 				where.append(" AND AB.staffid = " + request.get("staffid") + ")");
 			}
 			if(!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("startarea")&&
-					!item.getKey().equals("endarea")) {
+					!item.getKey().equals("endarea")&&!item.getKey().equals("startprice")&&!item.getKey().equals("endprice")) {
 				String value=item.getValue().toString();
 				if(checkvalue(value)) {
 					where.append(" AND BD."+item.getKey()+" = "+value);
@@ -96,13 +95,14 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		if(!typecode.isEmpty()) {
 			for(int i=0;i<typecode.size();i++) {
 				if(count==0) {
-					sql.append(" AND RT.code='"+typecode.get(i)+"' ");
+					sql.append(" AND (RT.code='"+typecode.get(i)+"' ");
 					count++;
 				}
 				else {
 					sql.append(" OR RT.code='"+typecode.get(i)+"' ");
 				}
 			}
+			sql.append(")");
 		}
 	}
 	
@@ -130,6 +130,21 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		}
 	}
 	
+	public void conditions2(Map<String,Object> request,StringBuilder where) {
+		if(checkKey(request, "startarea")) {
+			where.append(" AND RA.value>="+request.get("startarea"));
+		}
+		if(checkKey(request, "endarea")) {
+			where.append(" AND RA.value<="+request.get("endarea"));
+		}
+		if(checkKey(request,"startprice")) {
+			where.append( " AND BD.rentprice>="+request.get("startprice"));
+		}
+		if(checkKey(request, "endprice")) {
+			where.append(" AND BD.rentprice<="+request.get("endprice"));
+		}
+	}
+	
 	@Override
 	public List<BuildingEntity> findAll(Map<String,Object> request,List<String> typecode) {
 		StringBuilder sql=new StringBuilder("SELECT BD.id,BD.name,BD.districtid,BD.street,BD.ward,BD.numberofbasement,BD.floorarea,BD.rentprice,BD.managername,BD.managerphonenumber,"
@@ -137,7 +152,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 				+ " FROM building BD ");
 		joinTable(request,sql);
 		StringBuilder where=new StringBuilder("WHERE 1=1");
-		conditions(request,where);
+		conditions2(request,where);
 		whereTable(request,where);
 		Typecode(request,typecode,where);
 		sql.append(where);
