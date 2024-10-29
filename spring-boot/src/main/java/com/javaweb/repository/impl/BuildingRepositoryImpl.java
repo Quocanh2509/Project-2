@@ -106,29 +106,6 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		}
 	}
 	
-	@ResponseBody
-	public void conditions(Map<String,Object> request,StringBuilder where) {
-		Integer num = choose(request,"startarea","endarea");
-		if(num==0) {
-			where.append(" AND (RA.value>="+request.get("startarea")+" and RA.value<="+request.get("endarea")+")");
-		}
-		else if(num==1) {
-			where.append(" AND RA.value>="+request.get("startarea"));
-		}
-		else if(num==2) {
-			where.append(" AND RA.value<="+request.get("endarea"));
-		}
-		Integer num2= choose(request,"startprice","endprice");
-		if(num2==0) {
-			where.append(" AND BD.rentprice>="+request.get("startprice")+" AND BD.rentprice<="+request.get("endprice"));
-		}
-		else if(num2==1) {
-			where.append( " AND BD.rentprice>="+request.get("startprice"));
-		}
-		else if(num2==2) {
-			where.append(" AND BD.rentprice<="+request.get("endprice"));
-		}
-	}
 	
 	public void conditions2(Map<String,Object> request,StringBuilder where) {
 		if(checkKey(request, "startarea")) {
