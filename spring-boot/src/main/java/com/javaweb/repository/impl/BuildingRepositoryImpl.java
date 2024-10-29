@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.entity.BuildingEntity;
@@ -106,7 +106,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		}
 	}
 	
-	
+	@ResponseBody
 	public void conditions(Map<String,Object> request,StringBuilder where) {
 		Integer num = choose(request,"startarea","endarea");
 		if(num==0) {
