@@ -41,7 +41,7 @@ import com.javaweb.service.BuildingService;
 import ch.qos.logback.core.joran.action.NewRuleAction;
 
 @RestController
-public class NewAPI {
+public class BuildingsAPI {
 
 	
 	@Autowired
