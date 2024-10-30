@@ -25,7 +25,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	
 	
-	public static boolean checkvalue(String s) {
+	public static boolean checkValue(String s) {
 		try {
 			Integer num=Integer.parseInt(s);
 		}
@@ -44,19 +44,6 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 			else return false;
 		}
 		else return false;
-	}
-	
-	public static Integer choose(Map<String,Object> request,String start,String end) {
-		if(checkKey(request,start)&&checkKey(request,end)) {
-			return 0;// ton tai 2 key
-		}
-		else if(checkKey(request,start)) {
-			return 1;// ton tai 1 key ben trai
-		}
-		else if(checkKey(request,end)) {
-			return 2;// ton tai 1 key ben phai
-		}
-		return 3;
 	}
 	
 	public void joinTable(Map<String,Object> request,StringBuilder sql) {
@@ -85,7 +72,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 			if(checkKey(request, item.getKey())&&!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("startarea")&&
 					!item.getKey().equals("endarea")&&!item.getKey().equals("startprice")&&!item.getKey().equals("endprice")) {
 				String value=item.getValue().toString();
-				if(checkvalue(value)) {
+				if(checkValue(value)) {
 					where.append(" AND BD."+item.getKey()+" = "+value);
 				}
 				else {
