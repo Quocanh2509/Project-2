@@ -97,7 +97,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	
 	
-	public void Typecode(Map<String,Object> request,List<String> typecode,StringBuilder sql) {
+	public void typeCode(Map<String,Object> request,List<String> typecode,StringBuilder sql) {
 		int count=0;
 		if(typecode==null) {
 			return;
@@ -119,16 +119,16 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	
 	public void conditions(Map<String,Object> request,StringBuilder where) {
-		if(emptyValue(request, "startarea")&&checkKey(request, "startarea")) {
+		if(checkKey(request, "startarea")) {
 			where.append(" AND RA.value>="+request.get("startarea"));
 		}
-		if(emptyValue(request, "endarea")&&checkKey(request, "endarea")) {
+		if(checkKey(request, "endarea")) {
 			where.append(" AND RA.value<="+request.get("endarea"));
 		}
-		if(emptyValue(request, "startprice")&&checkKey(request,"startprice")) {
+		if(checkKey(request,"startprice")) {
 			where.append( " AND BD.rentprice>="+request.get("startprice"));
 		}
-		if(emptyValue(request, "endprice")&&checkKey(request, "endprice")) {
+		if(checkKey(request, "endprice")) {
 			where.append(" AND BD.rentprice<="+request.get("endprice"));
 		}
 	}
@@ -142,7 +142,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		StringBuilder where=new StringBuilder("WHERE 1=1");
 		conditions(request,where);
 		whereTable(request,where);
-		Typecode(request,typecode,where);
+		typeCode(request,typecode,where);
 		sql.append(where);
 		sql.append(" GROUP BY BD.id ");
 		//System.out.println();

@@ -45,33 +45,13 @@ public class BuildingsAPI {
 
 	
 	@Autowired
-	public BuildingService buildingservice;
-	
-	
-	@GetMapping(value="/api")
-	public void in(@RequestParam Map<String,Object> id) {
-		System.out.print("success");
-	}
-	
+	public BuildingService buildingService;
 	
 	@GetMapping(value = "/api/buildings")
-	public Object postBuilding2(@RequestParam Map<String,Object> request,@RequestParam(required = false) List<String> typecode) {
-		List<BuildingResponseDTO> result=buildingservice.findAll(request,typecode);
+	public Object getBuilding2(@RequestParam Map<String,Object> request,@RequestParam(required = false) List<String> typecode) {
+		List<BuildingResponseDTO> result=buildingService.findAll(request,typecode);
 		return result;
 	}
 
-	// @RequestMapping(value = "/api/building/", method = RequestMethod.GET)
-	public void validate(BuildingDTO buildingDTO) throws FileRequireException {
-		if (buildingDTO.getName() == null || buildingDTO.getName().equals("")) {
-			throw new FileRequireException("dữ liệu không hợp lệ");
-		}
-		// return buildingDTO;
-	}
 
-//	@RequestMapping(value = "/api/building/", method = RequestMethod.GET)
-//	public Object getBuilding(BuildingDTO buildingDTO) {
-//		validate(buildingDTO);
-//		return buildingDTO;
-//	}
-//	
 }
