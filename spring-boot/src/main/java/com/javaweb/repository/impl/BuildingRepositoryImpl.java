@@ -35,10 +35,13 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		return true;
 	}
 	
-	
+	// co key co value
 	public static boolean checkKey(Map<String,Object> request,String key) {
-		if(request.containsKey(key)&&request.get(key)!=null && request.get(key)!=null) {
-			return true;
+		if(request.containsKey(key)) {
+			if(request.get(key)!=null||request.get(key).equals("")) {
+				return true;
+			}
+			else return false;
 		}
 		else return false;
 	}
@@ -75,11 +78,11 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	public void whereTable(Map<String,Object> request,StringBuilder where) {
 		for(Map.Entry<String, Object> item:request.entrySet()) {
-			if(emptyValue(request, "staffid")==true&&checkKey(request,"staffid")) {
+			if(checkKey(request, "staffid")==true&&checkKey(request,"staffid")) {
 				where.append(" AND EXISTS (SELECT 1 FROM assignmentbuilding AB WHERE AB.buildingid = BD.id ");
 				where.append(" AND AB.staffid = " + request.get("staffid") + ")");
 			}
-			if(emptyValue(request, item.getKey())==true&&!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("startarea")&&
+			if(checkKey(request, item.getKey())&&!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("startarea")&&
 					!item.getKey().equals("endarea")&&!item.getKey().equals("startprice")&&!item.getKey().equals("endprice")) {
 				String value=item.getValue().toString();
 				if(checkvalue(value)) {
