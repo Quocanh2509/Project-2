@@ -84,19 +84,19 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	
 	
-	public void typeCode(Map<String,Object> request,List<String> typecode,StringBuilder sql) {
+	public void typeCode(Map<String,Object> request,List<String> typeCodes,StringBuilder sql) {
 		int count=0;
-		if(typecode==null) {
+		if(typeCodes==null) {
 			return;
 		}
-		if(!typecode.isEmpty()) {
-			for(int i=0;i<typecode.size();i++) {
+		if(!typeCodes.isEmpty()) {
+			for(int i=0;i<typeCodes.size();i++) {
 				if(count==0) {
-					sql.append(" AND (RT.code='"+typecode.get(i)+"' ");
+					sql.append(" AND (RT.code='"+typeCodes.get(i)+"' ");
 					count++;
 				}
 				else {
-					sql.append(" OR RT.code='"+typecode.get(i)+"' ");
+					sql.append(" OR RT.code='"+typeCodes.get(i)+"' ");
 				}
 			}
 			sql.append(")");
@@ -121,7 +121,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	}
 	
 	@Override
-	public List<BuildingEntity> findAll(Map<String,Object> request,List<String> typecode) {
+	public List<BuildingEntity> findAll(Map<String,Object> request,List<String> typeCode) {
 		StringBuilder sql=new StringBuilder("SELECT BD.id,BD.name,BD.districtid,BD.street,BD.ward,BD.numberofbasement,BD.floorarea,BD.rentprice,BD.managername,BD.managerphonenumber,"
 				+ "BD.servicefee,BD.brokeragefee"
 				+ " FROM building BD ");
@@ -129,7 +129,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		StringBuilder where=new StringBuilder("WHERE 1=1");
 		conditions(request,where);
 		whereTable(request,where);
-		typeCode(request,typecode,where);
+		typeCode(request,typeCode,where);
 		sql.append(where);
 		sql.append(" GROUP BY BD.id ");
 		//System.out.println();
