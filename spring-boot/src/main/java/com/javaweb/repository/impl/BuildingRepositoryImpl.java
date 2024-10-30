@@ -65,7 +65,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	public void whereTable(Map<String,Object> request,StringBuilder where) {
 		for(Map.Entry<String, Object> item:request.entrySet()) {
-			if(checkKey(request, "staffid")==true&&checkKey(request,"staffid")) {
+			if(checkKey(request,"staffid")) {
 				where.append(" AND EXISTS (SELECT 1 FROM assignmentbuilding AB WHERE AB.buildingid = BD.id ");
 				where.append(" AND AB.staffid = " + request.get("staffid") + ")");
 			}
