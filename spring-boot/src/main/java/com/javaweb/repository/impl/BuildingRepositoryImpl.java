@@ -56,12 +56,6 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		}
 	}
 	
-	public static boolean emptyValue(Map<String,Object> request,String key) {
-		if(request.containsKey(key)&&(request.get(key).equals("")||request.get(key).equals(null))) {
-			return false;
-		}
-		else return true;
-	}
 	
 	public void whereTable(Map<String,Object> request,StringBuilder where) {
 		for(Map.Entry<String, Object> item:request.entrySet()) {
