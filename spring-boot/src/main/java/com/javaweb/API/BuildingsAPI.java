@@ -42,6 +42,7 @@ import ch.qos.logback.core.joran.action.NewRuleAction;
 
 @RestController
 public class BuildingsAPI {
+	@Autowired
 	public BuildingService buildingService;
 
 	@GetMapping(value = "/api/buildings")

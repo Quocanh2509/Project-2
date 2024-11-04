@@ -38,7 +38,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	// co key co value
 	public static boolean checkKey(Map<String,Object> request,String key) {
 		if(request.containsKey(key)) {
-			if(request.get(key)!=null||request.get(key).equals("")) {
+			if(request.get(key)!=null||!request.get(key).equals("")) {
 				return true;
 			}
 			else return false;
@@ -55,6 +55,8 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 			sql.append(" inner join rentarea RA on BD.id=RA.buildingid ");
 		}
 	}
+	
+	
 	
 	
 	public void whereTable(Map<String,Object> request,StringBuilder where) {
