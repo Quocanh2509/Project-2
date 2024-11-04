@@ -42,21 +42,8 @@ import ch.qos.logback.core.joran.action.NewRuleAction;
 
 @RestController
 public class BuildingsAPI {
-
-	
-	@Autowired
-<<<<<<< HEAD:spring-boot/src/main/java/com/javaweb/API/NewAPI.java
-	public BuildingService buildingservice;
-	hello
-	
-	@GetMapping(value="/api")
-	public void in(@RequestParam Integer id) {
-		System.out.print("success");
-	}
-=======
 	public BuildingService buildingService;
-	
->>>>>>> 03fce28fe3c509fe68913f35124ae64df1218716:spring-boot/src/main/java/com/javaweb/API/BuildingsAPI.java
+
 	@GetMapping(value = "/api/buildings")
 	public Object getBuilding2(@RequestParam Map<String,Object> request,@RequestParam(required = false) List<String> typecode) {
 		List<BuildingResponseDTO> result=buildingService.findAll(request,typecode);
