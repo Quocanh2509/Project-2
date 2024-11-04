@@ -46,7 +46,7 @@ public class NewAPI {
 	
 	@Autowired
 	public BuildingService buildingservice;
-	
+	hello
 	
 	@GetMapping(value="/api")
 	public void in(@RequestParam Integer id) {
