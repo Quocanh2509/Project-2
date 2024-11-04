@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.entity.BuildingEntity;
@@ -25,7 +25,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	
 	
-	public static boolean checkvalue(String s) {
+	public static boolean checkValue(String s) {
 		try {
 			Integer num=Integer.parseInt(s);
 		}
@@ -35,25 +35,15 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		return true;
 	}
 	
-	
+	// co key co value
 	public static boolean checkKey(Map<String,Object> request,String key) {
-		if(request.containsKey(key)&&request.get(key)!=null && request.get(key)!=null) {
-			return true;
+		if(request.containsKey(key)) {
+			if(request.get(key)!=null||request.get(key).equals("")) {
+				return true;
+			}
+			else return false;
 		}
 		else return false;
-	}
-	
-	public static Integer choose(Map<String,Object> request,String start,String end) {
-		if(checkKey(request,start)&&checkKey(request,end)) {
-			return 0;// ton tai 2 key
-		}
-		else if(checkKey(request,start)) {
-			return 1;// ton tai 1 key ben trai
-		}
-		else if(checkKey(request,end)) {
-			return 2;// ton tai 1 key ben phai
-		}
-		return 3;
 	}
 	
 	public void joinTable(Map<String,Object> request,StringBuilder sql) {
@@ -64,8 +54,8 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		if(checkKey(request,"startarea")||checkKey(request,"endarea")) {
 			sql.append(" inner join rentarea RA on BD.id=RA.buildingid ");
 		}
-		
 	}
+	
 	
 	public void whereTable(Map<String,Object> request,StringBuilder where) {
 		for(Map.Entry<String, Object> item:request.entrySet()) {
@@ -73,10 +63,10 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 				where.append(" AND EXISTS (SELECT 1 FROM assignmentbuilding AB WHERE AB.buildingid = BD.id ");
 				where.append(" AND AB.staffid = " + request.get("staffid") + ")");
 			}
-			if(!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("startarea")&&
-					!item.getKey().equals("endarea")) {
+			if(checkKey(request, item.getKey())&&!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("startarea")&&
+					!item.getKey().equals("endarea")&&!item.getKey().equals("startprice")&&!item.getKey().equals("endprice")) {
 				String value=item.getValue().toString();
-				if(checkvalue(value)) {
+				if(checkValue(value)) {
 					where.append(" AND BD."+item.getKey()+" = "+value);
 				}
 				else {
@@ -88,50 +78,44 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	
 	
-	public void Typecode(Map<String,Object> request,List<String> typecode,StringBuilder sql) {
+	public void typeCode(Map<String,Object> request,List<String> typeCodes,StringBuilder sql) {
 		int count=0;
-		if(typecode==null) {
+		if(typeCodes==null) {
 			return;
 		}
-		if(!typecode.isEmpty()) {
-			for(int i=0;i<typecode.size();i++) {
+		if(!typeCodes.isEmpty()) {
+			for(int i=0;i<typeCodes.size();i++) {
 				if(count==0) {
-					sql.append(" AND RT.code='"+typecode.get(i)+"' ");
+					sql.append(" AND (RT.code='"+typeCodes.get(i)+"' ");
 					count++;
 				}
 				else {
-					sql.append(" OR RT.code='"+typecode.get(i)+"' ");
+					sql.append(" OR RT.code='"+typeCodes.get(i)+"' ");
 				}
 			}
+			sql.append(")");
 		}
 	}
 	
 	
+	
 	public void conditions(Map<String,Object> request,StringBuilder where) {
-		Integer num = choose(request,"startarea","endarea");
-		if(num==0) {
-			where.append(" AND (RA.value>="+request.get("startarea")+" and RA.value<="+request.get("endarea")+")");
-		}
-		else if(num==1) {
+		if(checkKey(request, "startarea")) {
 			where.append(" AND RA.value>="+request.get("startarea"));
 		}
-		else if(num==2) {
+		if(checkKey(request, "endarea")) {
 			where.append(" AND RA.value<="+request.get("endarea"));
 		}
-		Integer num2= choose(request,"startprice","endprice");
-		if(num2==0) {
-			where.append(" AND BD.rentprice>="+request.get("startprice")+" AND BD.rentprice<="+request.get("endprice"));
-		}
-		else if(num2==1) {
+		if(checkKey(request,"startprice")) {
 			where.append( " AND BD.rentprice>="+request.get("startprice"));
 		}
-		else if(num2==2) {
+		if(checkKey(request, "endprice")) {
 			where.append(" AND BD.rentprice<="+request.get("endprice"));
 		}
 	}
 	
 	@Override
-	public List<BuildingEntity> findAll(Map<String,Object> request,List<String> typecode) {
+	public List<BuildingEntity> findAll(Map<String,Object> request,List<String> typeCode) {
 		StringBuilder sql=new StringBuilder("SELECT BD.id,BD.name,BD.districtid,BD.street,BD.ward,BD.numberofbasement,BD.floorarea,BD.rentprice,BD.managername,BD.managerphonenumber,"
 				+ "BD.servicefee,BD.brokeragefee"
 				+ " FROM building BD ");
@@ -139,7 +123,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		StringBuilder where=new StringBuilder("WHERE 1=1");
 		conditions(request,where);
 		whereTable(request,where);
-		Typecode(request,typecode,where);
+		typeCode(request,typeCode,where);
 		sql.append(where);
 		sql.append(" GROUP BY BD.id ");
 		//System.out.println();

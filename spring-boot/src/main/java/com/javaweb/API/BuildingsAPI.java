@@ -41,10 +41,11 @@ import com.javaweb.service.BuildingService;
 import ch.qos.logback.core.joran.action.NewRuleAction;
 
 @RestController
-public class NewAPI {
+public class BuildingsAPI {
 
 	
 	@Autowired
+<<<<<<< HEAD:spring-boot/src/main/java/com/javaweb/API/NewAPI.java
 	public BuildingService buildingservice;
 	hello
 	
@@ -52,24 +53,15 @@ public class NewAPI {
 	public void in(@RequestParam Integer id) {
 		System.out.print("success");
 	}
+=======
+	public BuildingService buildingService;
+	
+>>>>>>> 03fce28fe3c509fe68913f35124ae64df1218716:spring-boot/src/main/java/com/javaweb/API/BuildingsAPI.java
 	@GetMapping(value = "/api/buildings")
-	public Object postBuilding2(@RequestParam Map<String,Object> request,@RequestParam List<String> typecode) {
-		List<BuildingResponseDTO> result=buildingservice.findAll(request,typecode);
+	public Object getBuilding2(@RequestParam Map<String,Object> request,@RequestParam(required = false) List<String> typecode) {
+		List<BuildingResponseDTO> result=buildingService.findAll(request,typecode);
 		return result;
 	}
 
-	// @RequestMapping(value = "/api/building/", method = RequestMethod.GET)
-	public void validate(BuildingDTO buildingDTO) throws FileRequireException {
-		if (buildingDTO.getName() == null || buildingDTO.getName().equals("")) {
-			throw new FileRequireException("dữ liệu không hợp lệ");
-		}
-		// return buildingDTO;
-	}
 
-//	@RequestMapping(value = "/api/building/", method = RequestMethod.GET)
-//	public Object getBuilding(BuildingDTO buildingDTO) {
-//		validate(buildingDTO);
-//		return buildingDTO;
-//	}
-//	
 }

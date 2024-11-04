@@ -21,13 +21,13 @@ public class DistrictRepositoryImpl implements DistrictRepository{
 	@Override
 	public DistrictEntity findAll(Integer id) {
 		String sql="SELECT name from district where id="+id;
-		DistrictEntity districtentity=new DistrictEntity();
+		DistrictEntity districtEntity=new DistrictEntity();
 		
 		try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 				Statement stm = conn.createStatement();
 				ResultSet rs = stm.executeQuery(sql.toString())) {
 				while(rs.next()) {
-					districtentity.setName(rs.getString("name"));
+					districtEntity.setName(rs.getString("name"));
 				}
 				System.out.println("Connected database successfully...");
 			} catch (SQLException e) {
@@ -35,7 +35,7 @@ public class DistrictRepositoryImpl implements DistrictRepository{
 				System.out.println("Connected database failed...");
 			}
 
-		return districtentity;
+		return districtEntity;
 	}
 	
 }

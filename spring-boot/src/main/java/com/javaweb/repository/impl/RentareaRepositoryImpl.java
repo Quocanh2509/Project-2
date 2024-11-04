@@ -31,9 +31,9 @@ public class RentareaRepositoryImpl implements RentareaRepository {
 				Statement stm = conn.createStatement();
 				ResultSet rs = stm.executeQuery(sql)) {
 				while(rs.next()) {
-					RentareaEntity rentareaentity=new RentareaEntity();
-					rentareaentity.setValue(rs.getString("value"));
-					arr.add(rentareaentity);
+					RentareaEntity rentareaEntity=new RentareaEntity();
+					rentareaEntity.setValue(rs.getString("value"));
+					arr.add(rentareaEntity);
 				}
 				//System.out.println("Connected database successfully...");
 			} catch (SQLException e) {

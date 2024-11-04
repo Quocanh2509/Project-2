@@ -22,39 +22,39 @@ import com.javaweb.service.BuildingService;
 public class BuildingServiceImpl implements BuildingService {
 
 	@Autowired
-	public BuildingRepository buildingrepository;
+	public BuildingRepository buildingRepository;
 
 	@Autowired
-	public DistrictRepository districtrepository;
+	public DistrictRepository districtRepository;
 	
 	@Autowired
-	public RentareaRepository rentarearepository;
+	public RentareaRepository rentareaRepository;
 	
 	@Override
 	public List<BuildingResponseDTO> findAll(Map<String,Object> request,List<String> typecode) {
-		List<BuildingEntity> result=buildingrepository.findAll(request,typecode);
+		List<BuildingEntity> result=buildingRepository.findAll(request,typecode);
 		List<BuildingResponseDTO> ans=new ArrayList<BuildingResponseDTO>();
 		for(BuildingEntity it:result) {
-			BuildingResponseDTO buildingreponsedto=new BuildingResponseDTO();
-			List<RentareaEntity> rentareaentity = rentarearepository.findAll(it.getId());
-			DistrictEntity buildingentity=districtrepository.findAll(it.getDistrictId());
-			buildingreponsedto.setId(it.getId());
-			buildingreponsedto.setName(it.getName());
-			buildingreponsedto.setAddress(it.getStreet()+", "+it.getWard()+", "+buildingentity.getName());
-			buildingreponsedto.setNumberofbasement(it.getNumberofbasement());
+			BuildingResponseDTO buildingReponseDto=new BuildingResponseDTO();
+			List<RentareaEntity> rentareaEntity = rentareaRepository.findAll(it.getId());
+			DistrictEntity districtEntity=districtRepository.findAll(it.getDistrictId());
+			buildingReponseDto.setId(it.getId());
+			buildingReponseDto.setName(it.getName());
+			buildingReponseDto.setAddress(it.getStreet()+", "+it.getWard()+", "+districtEntity.getName());
+			buildingReponseDto.setNumberofbasement(it.getNumberofbasement());
 			StringBuilder area=new StringBuilder();
-			for(RentareaEntity item:rentareaentity) {
+			for(RentareaEntity item:rentareaEntity) {
 				area.append(item.getValue()+",");
 			}
 			area.deleteCharAt(area.length()-1);
-			buildingreponsedto.setArea(area.toString());
-			buildingreponsedto.setFloorarea(it.getFloorarea());
-			buildingreponsedto.setManagername(it.getManagername());
-			buildingreponsedto.setManagerphonenumber(it.getManagerphonenumber());
-			buildingreponsedto.setRentprice(it.getRentprice());
-			buildingreponsedto.setServicefee(it.getServicefee());
-			buildingreponsedto.setBrokeragefee(it.getBrokeragefee());
-			ans.add(buildingreponsedto);
+			buildingReponseDto.setArea(area.toString());
+			buildingReponseDto.setFloorarea(it.getFloorarea());
+			buildingReponseDto.setManagername(it.getManagername());
+			buildingReponseDto.setManagerphonenumber(it.getManagerphonenumber());
+			buildingReponseDto.setRentprice(it.getRentprice());
+			buildingReponseDto.setServicefee(it.getServicefee());
+			buildingReponseDto.setBrokeragefee(it.getBrokeragefee());
+			ans.add(buildingReponseDto);
 		}
 		return ans;
 	}
