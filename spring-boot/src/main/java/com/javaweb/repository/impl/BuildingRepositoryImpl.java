@@ -140,7 +140,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 				building.setName(rs.getString("name"));
 				building.setStreet(rs.getString("street"));
 				building.setWard(rs.getString("ward"));
-				building.setDistrictId(rs.getInt("districtId"));
+				building.setDistrictid(rs.getInt("districtid"));
 				building.setNumberofbasement(rs.getInt("numberofbasement"));
 				building.setFloorarea(rs.getInt("floorarea"));
 				building.setManagername(rs.getString("managername"));
@@ -150,7 +150,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 				building.setBrokeragefee(rs.getInt("brokeragefee"));
 				arr.add(building);
 			}
-			//System.out.println("Connected database successfully...");
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 			//System.out.println("Connected database failed...");

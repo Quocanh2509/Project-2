@@ -36,7 +36,9 @@ import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RentareaRepository;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.repository.entity.RentareaEntity;
+import com.javaweb.service.AddBuildingService;
 import com.javaweb.service.BuildingService;
+import com.javaweb.service.DeleteBuildingService;
 
 import ch.qos.logback.core.joran.action.NewRuleAction;
 
@@ -51,5 +53,25 @@ public class BuildingsAPI {
 		return result;
 	}
 
-
+	@Autowired
+	private AddBuildingService addbuildingservice;
+	
+	@PostMapping(value="/api/buildings/add")
+	public String AddBuilding(@RequestBody BuildingEntity building) {
+		addbuildingservice.addBuilding(building);
+        return "Tòa nhà đã được thêm thành công!";
+    }
+	
+	
+	@Autowired
+	private DeleteBuildingService deleteBuildingservice;
+	
+	@DeleteMapping("/api/buildings/{id}")
+    public String deleteBuilding(@PathVariable int id) {
+		deleteBuildingservice.deleteBuilding(id);
+        return "Building with ID " + id + " has been deleted.";
+    }
+	
+	
+	
 }

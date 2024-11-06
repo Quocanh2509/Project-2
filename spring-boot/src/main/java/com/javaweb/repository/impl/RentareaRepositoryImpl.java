@@ -35,7 +35,6 @@ public class RentareaRepositoryImpl implements RentareaRepository {
 					rentareaEntity.setValue(rs.getString("value"));
 					arr.add(rentareaEntity);
 				}
-				//System.out.println("Connected database successfully...");
 			} catch (SQLException e) {
 				e.printStackTrace();
 				//System.out.println("Connected database failed...");

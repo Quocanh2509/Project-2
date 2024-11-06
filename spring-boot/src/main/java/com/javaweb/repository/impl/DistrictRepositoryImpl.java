@@ -29,7 +29,7 @@ public class DistrictRepositoryImpl implements DistrictRepository{
 				while(rs.next()) {
 					districtEntity.setName(rs.getString("name"));
 				}
-				System.out.println("Connected database successfully...");
+				//System.out.println("Connected database successfully...");
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Connected database failed...");
