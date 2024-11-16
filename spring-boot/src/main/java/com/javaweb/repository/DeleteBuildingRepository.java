@@ -13,6 +13,7 @@ public class DeleteBuildingRepository {
 	
 	public int deleteBuildingById(int id) {
 		 String sql = "DELETE FROM building WHERE id = ?";
+		 //System.out.println( );
 	     return jdbcTemplate.update(sql, id);
 	}
 }

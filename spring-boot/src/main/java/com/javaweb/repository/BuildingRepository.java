@@ -3,8 +3,9 @@ package com.javaweb.repository;
 import java.util.List;
 import java.util.Map;
 
+import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.repository.entity.*;
 
 public interface BuildingRepository {
-	public List<BuildingEntity> findAll(Map<String,Object> request,List<String> typecode);
+	public List<BuildingEntity> findAll(BuildingSearchBuilder builder);
 }

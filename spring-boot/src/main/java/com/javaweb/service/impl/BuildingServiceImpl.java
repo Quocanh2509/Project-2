@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.javaweb.Beans.response.BuildingResponseDTO;
 import com.javaweb.Beans.response.RentareaResponseDTO;
+import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.BuildingConverter;
+import com.javaweb.converter.BuildingSearchBuilderConverter;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.DistrictRepository;
 import com.javaweb.repository.RentareaRepository;
@@ -34,9 +36,13 @@ public class BuildingServiceImpl implements BuildingService {
 	@Autowired
 	public BuildingConverter buildingConverter;
 	
+	@Autowired
+	private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
+	
 	@Override
-	public List<BuildingResponseDTO> findAll(Map<String,Object> request,List<String> typecode) {
-		List<BuildingEntity> result=buildingRepository.findAll(request,typecode);
+	public List<BuildingResponseDTO> findAll(Map<String,Object> request,List<String> typeCode) {
+		BuildingSearchBuilder builder = buildingSearchBuilderConverter.toBuildingSearchBuilder(request, typeCode);
+		List<BuildingEntity> result=buildingRepository.findAll(builder);
 		List<BuildingResponseDTO> ans=new ArrayList<BuildingResponseDTO>();
 		for(BuildingEntity it:result) {
 			BuildingResponseDTO buildingReponseDto=buildingConverter.toBuildingResponseDTO(it);

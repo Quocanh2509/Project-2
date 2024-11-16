@@ -34,7 +34,7 @@ public class DistrictRepositoryImpl implements DistrictRepository{
 				e.printStackTrace();
 				System.out.println("Connected database failed...");
 			}
-
+		System.out.print(districtEntity.getName());
 		return districtEntity;
 	}
 	

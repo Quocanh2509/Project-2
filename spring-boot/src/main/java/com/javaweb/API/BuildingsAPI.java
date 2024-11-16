@@ -1,6 +1,8 @@
 package com.javaweb.API;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,13 +45,20 @@ import com.javaweb.service.DeleteBuildingService;
 import ch.qos.logback.core.joran.action.NewRuleAction;
 
 @RestController
+@PropertySource("classpath:application.properties")
 public class BuildingsAPI {
+	
+	
 	@Autowired
 	public BuildingService buildingService;
 
+	
+	@Value("${dev.nguyen}")
+	private String temp;
 	@GetMapping(value = "/api/buildings")
-	public Object getBuilding2(@RequestParam Map<String,Object> request,@RequestParam(required = false) List<String> typecode) {
-		List<BuildingResponseDTO> result=buildingService.findAll(request,typecode);
+	public Object getBuilding2(@RequestParam Map<String,Object> request,@RequestParam(required = false) List<String> typeCode) {
+		System.out.println(temp);
+		List<BuildingResponseDTO> result=buildingService.findAll(request,typeCode);
 		return result;
 	}
 
@@ -69,7 +78,7 @@ public class BuildingsAPI {
 	@DeleteMapping("/api/buildings/{id}")
     public String deleteBuilding(@PathVariable int id) {
 		deleteBuildingservice.deleteBuilding(id);
-        return "Building with ID " + id + " has been deleted.";
+        return "Tòa nhà có id là " + id + " đã được xóa thành công.";
     }
 	
 	

@@ -29,6 +29,7 @@ public class BuildingConverter {
 	public BuildingResponseDTO toBuildingResponseDTO(BuildingEntity it) {
 		BuildingResponseDTO buildingReponseDto=modelMapper.map(it, BuildingResponseDTO.class);
 		List<RentareaEntity> rentareaEntity = rentareaRepository.findAll(it.getId());
+		Integer num=it.getDistrictid();
 		DistrictEntity districtEntity=districtRepository.findAll(it.getDistrictid());
 //		buildingReponseDto.setId(it.getId());
 //		buildingReponseDto.setName(it.getName());
