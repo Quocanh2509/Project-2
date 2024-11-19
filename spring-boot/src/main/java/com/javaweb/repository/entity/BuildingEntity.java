@@ -10,60 +10,89 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ManyToAny;
 
-//@Entity
-//@Table(name="building")
+@Entity
+@Table(name="building")
 public class BuildingEntity {
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	//@Column(name="name")
+	@Column(name="name")
 	private String name;
 	
-	//@Column(name="street")
+	@Column(name="street")
 	private String street;
 	
-	//@Column(name="ward")
+	@Column(name="ward")
 	private String ward;
 	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name="districtid")
-//	private DistrictEntity district;
-//	
-//	@OneToMany(mappedBy = "buildingEntity",fetch = FetchType.LAZY)
-//	private List<RentareaEntity> rentareas = new ArrayList<>();
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="districtid")
+	private DistrictEntity district;
+	
+	@OneToMany(mappedBy = "buildingEntity",fetch = FetchType.EAGER)
+	private List<RentareaEntity> rentareas = new ArrayList<>();
+	
+//	@ManyToMany
+//	@JoinTable(
+//		name="assigntmentbuilding",
+//		joinColumns = @JoinColumn(name="id"),
+//		inverseJoinColumns = @JoinColumn(name="buildingid")
+//	)
+//	private List<AssignmentBuildingEntity> assignmentBuildingEntities=new ArrayList<>();
 	
 	
 	
-//	public List<RentareaEntity> getRentareas() {
-//		return rentareas;
+	public List<RentareaEntity> getRentareas() {
+		return rentareas;
+	}
+	public void setRentareas(List<RentareaEntity> rentareas) {
+		this.rentareas = rentareas;
+	}
+	
+	public DistrictEntity getDistrict() {
+		return district;
+	}
+	public void setDistrict(DistrictEntity district) {
+		this.district = district;
+	}
+
+	
+	
+//	public List<BuildingEntity> getBuildingEntity() {
+//		return buildingEntity;
 //	}
-//	public void setRentareas(List<RentareaEntity> rentareas) {
-//		this.rentareas = rentareas;
+//	public void setBuildingEntity(List<BuildingEntity> buildingEntity) {
+//		this.buildingEntity = buildingEntity;
 //	}
-//	public Integer getDistrictid() {
-//		return districtid;
-//	}
-//	public void setDistrictid(Integer districtid) {
-//		this.districtid = districtid;
-//	}
-	private Integer districtid;
+
+
+	@Column(name="numberofbasement")
 	private Integer numberofbasement;
-	private Integer floorarea;
-	private String managername;
-	private String managerphonenumber;
-	private Integer rentprice;
-	private String servicefee;
-	private Integer brokeragefee;
-	private Integer emptyspace;
 	
-	//@Column(name="map")
+	@Column(name="floorarea")
+	private Integer floorarea;
+	@Column(name="managername")
+	private String managername;
+	@Column(name="managerphonenumber")
+	private String managerphonenumber;
+	@Column(name="rentprice")
+	private Integer rentprice;
+	@Column(name="servicefee")
+	private String servicefee;
+	@Column(name="brokeragefee")
+	private Integer brokeragefee;
+	//private Integer emptyspace;
+	
+	@Column(name="map")
 	private String map;
 	
 	
@@ -94,12 +123,12 @@ public class BuildingEntity {
 	public void setWard(String ward) {
 		this.ward = ward;
 	}
-	public Integer getDistrictid() {
-		return districtid;
-	}
-	public void setDistrictid(Integer districtid) {
-		this.districtid = districtid;
-	}
+//	public Integer getDistrictid() {
+//		return districtid;
+//	}
+//	public void setDistrictid(Integer districtid) {
+//		this.districtid = districtid;
+//	}
 	public Integer getNumberofbasement() {
 		return numberofbasement;
 	}
@@ -142,12 +171,12 @@ public class BuildingEntity {
 	public void setBrokeragefee(Integer brokeragefee) {
 		this.brokeragefee = brokeragefee;
 	}
-	public Integer getEmptyspace() {
-		return emptyspace;
-	}
-	public void setEmptyspace(Integer emptyspace) {
-		this.emptyspace = emptyspace;
-	}
+//	public Integer getEmptyspace() {
+//		return emptyspace;
+//	}
+//	public void setEmptyspace(Integer emptyspace) {
+//		this.emptyspace = emptyspace;
+//	}
 	public String getMap() {
 		return map;
 	}

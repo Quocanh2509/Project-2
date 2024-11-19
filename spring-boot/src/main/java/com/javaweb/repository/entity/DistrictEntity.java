@@ -16,23 +16,23 @@ import com.javaweb.repository.entity.BuildingEntity;
 
 
 
-//@Entity
-//@Table(name="district")
+@Entity
+@Table(name="district")
 public class DistrictEntity {
 	
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	//@Column(name="code")
+	@Column(name="code")
 	private String code;
 	
-	//@Column(name="name")
+	@Column(name="name")
 	private String name;
 	
 	
-//	@OneToMany(mappedBy = "district", fetch = FetchType.LAZY)
-//	private List<BuildingEntity> buildings = new ArrayList<BuildingEntity>();
+	@OneToMany(mappedBy = "district", fetch = FetchType.LAZY)
+	private List<BuildingEntity> buildings = new ArrayList<BuildingEntity>();
 //	
 	
 	
@@ -56,12 +56,12 @@ public class DistrictEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-//	public List<BuildingEntity> getBuildings() {
-//		return buildings;
-//	}
-//	public void setBuildings(List<BuildingEntity> buildings) {
-//		this.buildings = buildings;
-//	}
+	public List<BuildingEntity> getBuildings() {
+		return buildings;
+	}
+	public void setBuildings(List<BuildingEntity> buildings) {
+		this.buildings = buildings;
+	}
 	
 	
 	

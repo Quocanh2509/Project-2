@@ -17,6 +17,8 @@ import com.javaweb.repository.entity.RentareaEntity;
 @Component
 public class BuildingConverter {
 	
+	
+	
 	@Autowired
 	public DistrictRepository districtRepository;
 	
@@ -28,25 +30,20 @@ public class BuildingConverter {
 	
 	public BuildingResponseDTO toBuildingResponseDTO(BuildingEntity it) {
 		BuildingResponseDTO buildingReponseDto=modelMapper.map(it, BuildingResponseDTO.class);
-		List<RentareaEntity> rentareaEntity = rentareaRepository.findAll(it.getId());
-		Integer num=it.getDistrictid();
-		DistrictEntity districtEntity=districtRepository.findAll(it.getDistrictid());
-//		buildingReponseDto.setId(it.getId());
-//		buildingReponseDto.setName(it.getName());
+		//List<RentareaEntity> rentareaEntity = rentareaRepository.findAll(it.getId());
+		List<RentareaEntity> rentareaEntity=it.getRentareas();
+		//Integer num=it.getDistrictid();
+		//DistrictEntity districtEntity=districtRepository.findAll(it.getDistrictid());
+		DistrictEntity districtEntity = it.getDistrict();
+
 		buildingReponseDto.setAddress(it.getStreet()+", "+it.getWard()+", "+districtEntity.getName());
-//		buildingReponseDto.setNumberofbasement(it.getNumberofbasement());
+
 		StringBuilder area=new StringBuilder();
 		for(RentareaEntity item:rentareaEntity) {
 			area.append(item.getValue()+",");
 		} 
 		if(area.length()!=0) area.deleteCharAt(area.length()-1);
 		buildingReponseDto.setArea(area.toString());
-//		buildingReponseDto.setFloorarea(it.getFloorarea());
-//		buildingReponseDto.setManagername(it.getManagername());
-//		buildingReponseDto.setManagerphonenumber(it.getManagerphonenumber());
-//		buildingReponseDto.setRentprice(it.getRentprice());
-//		buildingReponseDto.setServicefee(it.getServicefee());
-//		buildingReponseDto.setBrokeragefee(it.getBrokeragefee());
 		return buildingReponseDto;
 	}
 }

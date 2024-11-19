@@ -11,29 +11,29 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ManyToAny;
 
-//@Entity
-//@Table(name="rentarea")
+@Entity
+@Table(name="rentarea")
 public class RentareaEntity {
 
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	//@Column(name="value")
+	@Column(name="value")
 	private String value;
 
-//	@ManyToOne
-//	@JoinColumn(name="buildingid")
-//	private BuildingEntity buildingEntity;
-//	
-//	
-//	public BuildingEntity getBuildingEntity() {
-//		return buildingEntity;
-//	}
-//
-//	public void setBuildingEntity(BuildingEntity buildingEntity) {
-//		this.buildingEntity = buildingEntity;
-//	}
+	@ManyToOne
+	@JoinColumn(name="buildingid")
+	private BuildingEntity buildingEntity;
+	
+	
+	public BuildingEntity getBuildingEntity() {
+		return buildingEntity;
+	}
+
+	public void setBuildingEntity(BuildingEntity buildingEntity) {
+		this.buildingEntity = buildingEntity;
+	}
 
 	
 	

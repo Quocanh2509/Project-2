@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BuildingSearchBuilder {
+	private Integer id;
 	private String name;
 	private Integer floorArea;
 	private String ward;
@@ -78,6 +79,7 @@ public class BuildingSearchBuilder {
 	}
 
 	private BuildingSearchBuilder(Builder builder) {
+		this.id=builder.id;
 		this.name=builder.name;
 		this.floorArea=builder.floorArea;
 		this.ward=builder.ward;
@@ -95,6 +97,7 @@ public class BuildingSearchBuilder {
 	}
 	
 	public static class Builder{
+		private Integer id;
 		private String name;
 		private Integer floorArea;
 		private String ward;
@@ -109,6 +112,11 @@ public class BuildingSearchBuilder {
 		private Integer areaFrom;
 		private Integer areaTo;
 		private Integer staffId;
+		
+	    public Builder setId(Integer id) {
+	    	this.id=id;
+	    	return this;
+	    }
 		
 		public Builder setName(String name) {
 			this.name=name;

@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,10 +25,8 @@ import com.javaweb.repository.entity.BuildingEntity;
 public class BuildingRepositoryImpl implements BuildingRepository{
 
 	
-	static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/estabasic";
-	static final String USER = "root";
-	static final String PASS = "amfrbghaf123@";
-	
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	
 	public static boolean checkValue(String s) {
@@ -57,6 +59,11 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		if( areaFrom != null || areaTo != null) {
 			sql.append(" inner join rentarea RA on BD.id=RA.buildingid ");
 		}
+		Integer staffId=builder.getStaffId();
+		if(staffId != null) {
+			sql.append(" inner join assignmentbuilding AB on AB.buildingid = BD.id ");
+		}
+		
 	}
 	
 	
@@ -85,10 +92,12 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 			for(Field it : fields) {
 				it.setAccessible(true);
 				String fieldName=it.getName();
+		
 				if(!fieldName.equals("typeCode")&&!fieldName.equals("areaFrom")&&!fieldName.equals("areaTo")
-						&&!fieldName.equals("rentPriceFrom")&&!fieldName.equals("rentPriceTo")) {
+						&&!fieldName.equals("rentPriceFrom")&&!fieldName.equals("rentPriceTo")&&!fieldName.equals("staffId")) {
 					Object value = it.get(builder);
 					if(value != null) {
+						
 						if(it.getType().getName().equals("java.lang.Integer")) {
 							where.append(" AND BD."+fieldName+" = "+value);
 						}
@@ -127,6 +136,10 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	
 	public void conditions(BuildingSearchBuilder builder,StringBuilder where) {
+		Integer staffId=builder.getStaffId();
+		if(staffId != null) {
+			where.append(" AND AB.staffid="+staffId);
+		}
 		Integer areaFrom=builder.getAreaFrom();
 		if(areaFrom!=null) {
 			where.append(" AND RA.value>="+areaFrom);
@@ -145,11 +158,12 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		}
 	}
 	
+	
+	
+	
 	@Override
 	public List<BuildingEntity> findAll(BuildingSearchBuilder builder) {
-		StringBuilder sql=new StringBuilder("SELECT BD.id,BD.name,BD.districtid,BD.street,BD.ward,BD.numberofbasement,BD.floorarea,BD.rentprice,BD.managername,BD.managerphonenumber,"
-				+ "BD.servicefee,BD.brokeragefee"
-				+ " FROM building BD ");
+		StringBuilder sql=new StringBuilder("SELECT BD.* FROM building BD ");
 		joinTable(builder,sql);
 		StringBuilder where=new StringBuilder("WHERE 1=1");
 		conditions(builder,where);
@@ -159,33 +173,8 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		sql.append(" GROUP BY BD.id ");
 		//System.out.println();
 		System.out.println(sql.toString());
-		List<BuildingEntity> arr=new ArrayList<>();
-		try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			Statement stm = conn.createStatement();
-			ResultSet rs = stm.executeQuery(sql.toString())) {
-			while(rs.next()) {
-				BuildingEntity building=new BuildingEntity();
-				building.setId(rs.getInt("id"));
-				building.setName(rs.getString("name"));
-				building.setStreet(rs.getString("street"));
-				building.setWard(rs.getString("ward"));
-				building.setDistrictid(rs.getInt("districtid"));
-				building.setNumberofbasement(rs.getInt("numberofbasement"));
-				building.setFloorarea(rs.getInt("floorarea"));
-				building.setManagername(rs.getString("managername"));
-				building.setManagerphonenumber(rs.getString("managerphonenumber"));
-				building.setRentprice(rs.getInt("rentprice"));
-				building.setServicefee(rs.getString("servicefee"));
-				building.setBrokeragefee(rs.getInt("brokeragefee"));
-				arr.add(building);
-			}
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-			//System.out.println("Connected database failed...");
-		}
-
-		return arr;
+		Query query = entityManager.createNativeQuery(sql.toString(),BuildingEntity.class);
+		return query.getResultList();
 	}
 	
 	
