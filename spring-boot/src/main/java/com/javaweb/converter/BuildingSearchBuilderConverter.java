@@ -15,6 +15,7 @@ public class BuildingSearchBuilderConverter {
 	public BuildingSearchBuilder toBuildingSearchBuilder(Map<String,Object> request,List<String> typeCode) {
 		// truy cập vào class Builder rồi truy cập vào từng trường dữ liệu 
 		BuildingSearchBuilder buildingSearchBuilder = new BuildingSearchBuilder.Builder()
+				                                       .setId(MapUtil.getObject(request, "id", Integer.class))
 				                                       .setName(MapUtil.getObject(request, "name", String.class))
 				                                       .setDistrictId(MapUtil.getObject(request, "districtId", Integer.class))
 				                                       .setAreaFrom(MapUtil.getObject(request, "areaFrom", Integer.class))

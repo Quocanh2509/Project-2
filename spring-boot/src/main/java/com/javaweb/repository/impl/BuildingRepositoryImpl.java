@@ -57,6 +57,10 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		if( areaFrom != null || areaTo != null) {
 			sql.append(" inner join rentarea RA on BD.id=RA.buildingid ");
 		}
+		Integer staffId = builder.getStaffId();
+		if(staffId != null) {
+			sql.append(" inner join assignmentbuilding AB ON AB.buildingid=BD.id ");
+		}
 	}
 	
 	
@@ -86,7 +90,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 				it.setAccessible(true);
 				String fieldName=it.getName();
 				if(!fieldName.equals("typeCode")&&!fieldName.equals("areaFrom")&&!fieldName.equals("areaTo")
-						&&!fieldName.equals("rentPriceFrom")&&!fieldName.equals("rentPriceTo")) {
+						&&!fieldName.equals("rentPriceFrom")&&!fieldName.equals("rentPriceTo")&&!fieldName.equals("staffId")) {
 					Object value = it.get(builder);
 					if(value != null) {
 						if(it.getType().getName().equals("java.lang.Integer")) {
@@ -127,6 +131,10 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	
 	public void conditions(BuildingSearchBuilder builder,StringBuilder where) {
+		Integer staffId=builder.getStaffId();
+		if(staffId != null) {
+			where.append(" AND AB.staffid="+staffId);
+		}
 		Integer areaFrom=builder.getAreaFrom();
 		if(areaFrom!=null) {
 			where.append(" AND RA.value>="+areaFrom);
