@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.repository.BuildingRepository;
+import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.repository.entity.BuildingEntity;
 
 @Repository
-public class BuildingRepositoryImpl implements BuildingRepository{
+public class BuildingRepositoryImpl implements BuildingRepositoryCustom{
 
 	
 	@PersistenceContext
@@ -39,14 +40,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		return true;
 	}
 	
-	// co key co value
-//	public static boolean checkKey(BuildingSearchBuilder builder,String key) {
-//		if(request.get(key)!=null||!request.get(key).equals("")) {
-//			return true;
-//		}
-//		else return false;
-//		
-//	}
+
 	
 	public void joinTable(BuildingSearchBuilder builder,StringBuilder sql) {
 		List<String> typeCode=builder.getTypeCode();
@@ -70,22 +64,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 	
 	
 	public void whereTable(BuildingSearchBuilder builder,StringBuilder where) {
-//		for(Map.Entry<String, Object> item:request.entrySet()) {
-//			if(checkKey(request,"staffid")) {
-//				where.append(" AND EXISTS (SELECT 1 FROM assignmentbuilding AB WHERE AB.buildingid = BD.id ");
-//				where.append(" AND AB.staffid = " + request.get("staffid") + ")");
-//			}
-//			if(checkKey(request, item.getKey())&&!item.getKey().equals("typecode")&&!item.getKey().equals("staffid")&&!item.getKey().equals("areaFrom")&&
-//					!item.getKey().equals("areaTo")&&!item.getKey().equals("rentPriceFrom")&&!item.getKey().equals("rentPriceTo")) {
-//				String value=item.getValue().toString();
-//				if(checkValue(value)) {
-//					where.append(" AND BD."+item.getKey()+" = "+value);
-//				}
-//				else {
-//					where.append(" AND BD."+item.getKey()+" LIKE '%"+value+"%'");
-//				}
-//			}
-//		}
+
 		try {
 			Field[] fields=BuildingSearchBuilder.class.getDeclaredFields();
 			
