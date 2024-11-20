@@ -175,6 +175,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		System.out.println(sql.toString());
 		Query query = entityManager.createNativeQuery(sql.toString(),BuildingEntity.class);
 		return query.getResultList();
+		
 	}
 	
 	
